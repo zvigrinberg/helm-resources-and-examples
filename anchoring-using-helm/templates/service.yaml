@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "helm-anchoring.fullname" . }}
+  labels:
+    {{- include "helm-anchoring.labels" . | nindent 4 }}
+    url1: {{ include "helm-anchoring.strip"  .Values.servers.list.address1 }}
+    url2: {{ include "helm-anchoring.strip"  .Values.servers.list.address2  }}
+    url3: {{ include "helm-anchoring.strip" .Values.servers.list.address3 }}
+
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "helm-anchoring.selectorLabels" . | nindent 4 }}
